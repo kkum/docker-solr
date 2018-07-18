@@ -1,6 +1,6 @@
 # Builds Solr image for a Windows container environment
-# escape=\
-FROM microsoft/windowsservercore
+# escape=`
+FROM microsoft/windowsservercore:ltsc2016
 
 SHELL ["powershell", "-NoProfile", "-Command", "$ErrorActionPreference = 'Stop';"]
 
@@ -15,11 +15,11 @@ ENV JAVA_HOME c:\\Java\\jre
 RUN setx PATH '%PATH%;c:\\Java\\jre'
 
 # Download and extract Solr project files
-RUN Invoke-WebRequest -Method Get -Uri "http://archive.apache.org/dist/lucene/solr/6.6.1/solr-6.6.1.zip" -OutFile /solr.zip ; \
+RUN Invoke-WebRequest -Method Get -Uri "http://archive.apache.org/dist/lucene/solr/6.6.2/solr-6.6.2.zip" -OutFile /solr.zip ; \
     Expand-Archive -Path /solr.zip -DestinationPath /solr ; \
     Remove-Item /solr.zip -Force
 
-WORKDIR "/solr/solr-6.6.1"
+WORKDIR "/solr/solr-6.6.2"
 
 EXPOSE 8983
 
@@ -29,4 +29,4 @@ HEALTHCHECK CMD powershell -command \
         if ($response.StatusCode -eq 200) { return 0} else {return 1}; \
     } catch { return 1 }
 
-ENTRYPOINT bin/solr start -port 8983 -f -noprompt
+ENTRYPOINT bin\solr start -port 8983 -f -noprompt

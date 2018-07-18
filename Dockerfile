@@ -16,10 +16,11 @@ RUN setx PATH '%PATH%;c:\\Java\\jre'
 
 # Download and extract Solr project files
 RUN Invoke-WebRequest -Method Get -Uri "http://archive.apache.org/dist/lucene/solr/6.6.2/solr-6.6.2.zip" -OutFile /solr.zip ; \
-    Expand-Archive -Path /solr.zip -DestinationPath /solr ; \
+    Expand-Archive -Path /solr.zip -DestinationPath / ; \
+    Rename-Item -Path c:\solr-6.6.2 -NewName solr ; \
     Remove-Item /solr.zip -Force
 
-WORKDIR "/solr/solr-6.6.2"
+WORKDIR "/solr"
 
 EXPOSE 8983
 
